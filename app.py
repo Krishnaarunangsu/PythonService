@@ -31,7 +31,7 @@ def get_user_name(username):
 @app.route('/login', methods=['GET'])
 def get_login_params():
     """
-    login
+    get username
     :return:
     """
     user_name = request.args.get('username')
@@ -44,7 +44,7 @@ def get_login_params():
 @app.route('/login', methods=['POST'])
 def login():
     """
-
+    login with username and password
     :return:
     """
     user_name = request.form.get('username')
