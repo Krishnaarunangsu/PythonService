@@ -1,5 +1,6 @@
 # Python Flask Microframework
 from flask import Flask, request, json, jsonify
+from src.middleware.data_processing_1 import get_module_subject
 
 app = Flask(__name__)  # Flask Constructor
 
@@ -57,7 +58,36 @@ def login():
 
 @app.route('/echo', methods=['POST'])
 def hello():
+    """
+
+    :return:
+    """
     return jsonify(request.json)
+
+
+@app.route('/return_json',methods=['GET'])
+def return_json():
+    """
+
+    :return:
+    """
+    if request.method == 'GET':
+        data= dict(module=15, subject='Big data and Analytics')
+        return jsonify(data)
+
+@app.route('/return_subject/<module>',methods=['GET'])
+def get_subject(module)->json:
+    """
+
+    Args:
+        module: int
+
+    Returns:
+        subject:json
+
+    """
+    subject=get_module_subject(int(module))
+    return subject
 
 
 if __name__ == '__main__':
@@ -67,3 +97,4 @@ if __name__ == '__main__':
 # https://flask.palletsprojects.com/en/2.1.x/api/
 # https://stackoverflow.com/questions/20001229/how-to-get-posted-json-in-flask
 # https://stackoverflow.com/questions/9733638/how-to-post-json-data-with-python-requests
+# https://www.imaginarycloud.com/blog/flask-python/
