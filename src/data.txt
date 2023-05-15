@@ -1,0 +1,6 @@
+[
+  {
+    "email": "arunangshu.sahu@abzooba.com",
+    "name": "Krishna"
+  }
+]

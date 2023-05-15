@@ -115,6 +115,78 @@ def submit_employee_data():
     else:
         return jsonify(f'Record has not been created successfully')
 
+@app.route('/create_record', methods=['POST'])
+def create_record():
+    record = json.loads(request.data)
+    print(record)
+    with open('src/data.txt', 'r') as f:
+        data = f.read()
+    if not data:
+        records = [record]
+    else:
+        records = json.loads(data)
+        records.append(record)
+    with open('src/data.txt', 'w') as f:
+        f.write(json.dumps(records, indent=2))
+    return jsonify(record)
+
+@app.route('/get_records/<name>', methods=['GET'])
+def get_records(name):
+    #name = request.args.get('name')
+    name = name
+    print(f'{name}')
+    with open('src/data.txt', 'r') as f:
+        data = f.read()
+        records = json.loads(data)
+        for record in records:
+            if record['name'] == name:
+                print(record)
+                return jsonify(record)
+        return jsonify({'error': 'data not found'})
+
+
+
+@app.route('/get_all_records', methods=['GET'])
+def get_all_records():
+
+    with open('src/data.txt', 'r') as f:
+        data = f.read()
+        records = json.loads(data)
+        return jsonify(records)
+        #return jsonify({'error': 'data not found'})
+
+@app.route('/update_record', methods=['PUT'])
+def update_record():
+    record = json.loads(request.data)
+    new_records = []
+    with open('src/data.txt', 'r') as f:
+        data = f.read()
+        records = json.loads(data)
+    for r in records:
+        if r['name'] == record['name']:
+            r['email'] = record['email']
+        new_records.append(r)
+    with open('src/data.txt', 'w') as f:
+        f.write(json.dumps(new_records, indent=2))
+    return jsonify(record)
+
+
+@app.route('/delete_record', methods=['DELETE'])
+def delete_record():
+    record = json.loads(request.data)
+    new_records = []
+    with open('src/data.txt', 'r') as f:
+        data = f.read()
+        records = json.loads(data)
+        for r in records:
+            if r['name'] == record['name']:
+                continue
+            new_records.append(r)
+    with open('src/data.txt', 'w') as f:
+        f.write(json.dumps(new_records, indent=2))
+    return jsonify(record)
+
+
 if __name__ == '__main__':
     app.run()
 # https://stackoverflow.com/questions/24892035/how-can-i-get-the-named-parameters-from-a-url-using-flask
@@ -123,3 +195,5 @@ if __name__ == '__main__':
 # https://stackoverflow.com/questions/20001229/how-to-get-posted-json-in-flask
 # https://stackoverflow.com/questions/9733638/how-to-post-json-data-with-python-requests
 # https://www.imaginarycloud.com/blog/flask-python/
+
+# https://pythonbasics.org/flask-rest-api/
