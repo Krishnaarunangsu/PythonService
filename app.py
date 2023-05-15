@@ -90,6 +90,20 @@ def get_subject(module)->json:
     return subject
 
 
+@app.route('/save_employee', methods=['POST'])
+def submit_employee_data():
+    """
+    Create a new Employee
+    Returns:
+
+    """
+    data=request.json
+    print(data['age'])
+    if data['name']!= '' and data['age']!=0:
+        return jsonify(f'{data["name"]} has been created successfully')
+    else:
+        return jsonify(f'Record has not been created successfully')
+
 if __name__ == '__main__':
     app.run()
 # https://stackoverflow.com/questions/24892035/how-can-i-get-the-named-parameters-from-a-url-using-flask
