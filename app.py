@@ -1,6 +1,7 @@
 # Python Flask Microframework
 from flask import Flask, request, json, jsonify
 from src.middleware.data_processing_1 import get_module_subject
+from src.middleware.user_data import check_user_login
 
 app = Flask(__name__)  # Flask Constructor
 
@@ -38,31 +39,13 @@ def get_login_params():
     user_name = request.args.get('username')
     password = request.args.get('password')
     print(f'User name:{user_name}')
-    print(f'Password:{password}')
-    return f'{user_name} Logged in Successfully'
-
-
-@app.route('/login', methods=['POST'])
-def login():
-    """
-    login with username and password
-    :return:
-    """
-    user_name = request.form.get('username')
-    password = request.form.get('password')
-    message = f'{user_name} Logged In Successfully'
-    print('Coming Here')
-    # return jsonify({'msg': 'Logged In successfully'})
-    return jsonify({'msg': message})
-
-
-@app.route('/echo', methods=['POST'])
-def hello():
-    """
-
-    :return:
-    """
-    return jsonify(request.json)
+    #print(f'Password:{password}')
+    logged_in = check_user_login(user_name, password)
+    if logged_in:
+        message = f'{user_name} Logged In Successfully'
+    else:
+        message = "Invalid Credentials"
+    return message
 
 
 @app.route('/return_json',methods=['GET'])
@@ -88,6 +71,34 @@ def get_subject(module)->json:
     """
     subject=get_module_subject(int(module))
     return subject
+
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    """
+    login with username and password
+    :return:
+    """
+    user_name = request.form.get('username')
+    password = request.form.get('password')
+    logged_in=check_user_login(user_name,password)
+    if logged_in:
+        message = f'{user_name} Logged In Successfully'
+    else:
+        message = "Invalid Credentials"
+    # return jsonify({'msg': 'Logged In successfully'})
+    return jsonify({'msg': message})
+
+
+@app.route('/echo', methods=['POST'])
+def hello():
+    """
+
+    :return:
+    """
+    return jsonify(request.json)
+
 
 
 @app.route('/save_employee', methods=['POST'])
