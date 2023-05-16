@@ -117,6 +117,11 @@ def submit_employee_data():
 
 @app.route('/create_record', methods=['POST'])
 def create_record():
+    """
+
+    Returns:
+
+    """
     record = json.loads(request.data)
     print(record)
     with open('src/data.txt', 'r') as f:
@@ -132,6 +137,14 @@ def create_record():
 
 @app.route('/get_records/<name>', methods=['GET'])
 def get_records(name):
+    """
+
+    Args:
+        name:
+
+    Returns:
+
+    """
     #name = request.args.get('name')
     name = name
     print(f'{name}')
@@ -148,7 +161,11 @@ def get_records(name):
 
 @app.route('/get_all_records', methods=['GET'])
 def get_all_records():
+    """
 
+    Returns:
+
+    """
     with open('src/data.txt', 'r') as f:
         data = f.read()
         records = json.loads(data)
@@ -157,6 +174,11 @@ def get_all_records():
 
 @app.route('/update_record', methods=['PUT'])
 def update_record():
+    """
+
+    Returns:
+
+    """
     record = json.loads(request.data)
     new_records = []
     with open('src/data.txt', 'r') as f:
@@ -173,6 +195,11 @@ def update_record():
 
 @app.route('/delete_record', methods=['DELETE'])
 def delete_record():
+    """
+
+    Returns:
+
+    """
     record = json.loads(request.data)
     new_records = []
     with open('src/data.txt', 'r') as f:
