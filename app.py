@@ -2,6 +2,7 @@
 from flask import Flask, request, json, jsonify
 from src.middleware.data_processing_1 import get_module_subject
 from src.middleware.user_data import check_user_login
+from src.python_crud.python_crud import insert_employee, fetch_all_employees,fetch_employee_detail_by_employee_id
 
 app = Flask(__name__)  # Flask Constructor
 
@@ -39,7 +40,7 @@ def get_login_params():
     user_name = request.args.get('username')
     password = request.args.get('password')
     print(f'User name:{user_name}')
-    #print(f'Password:{password}')
+    # print(f'Password:{password}')
     logged_in = check_user_login(user_name, password)
     if logged_in:
         message = f'{user_name} Logged In Successfully'
@@ -48,18 +49,19 @@ def get_login_params():
     return message
 
 
-@app.route('/return_json',methods=['GET'])
+@app.route('/return_json', methods=['GET'])
 def return_json():
     """
 
     :return:
     """
     if request.method == 'GET':
-        data= dict(module=15, subject='Big data and Analytics')
+        data = dict(module=15, subject='Big data and Analytics')
         return jsonify(data)
 
-@app.route('/return_subject/<module>',methods=['GET'])
-def get_subject(module)->json:
+
+@app.route('/return_subject/<module>', methods=['GET'])
+def get_subject(module) -> json:
     """
 
     Args:
@@ -69,9 +71,8 @@ def get_subject(module)->json:
         subject:json
 
     """
-    subject=get_module_subject(int(module))
+    subject = get_module_subject(int(module))
     return subject
-
 
 
 @app.route('/login', methods=['POST'])
@@ -82,7 +83,7 @@ def login():
     """
     user_name = request.form.get('username')
     password = request.form.get('password')
-    logged_in=check_user_login(user_name,password)
+    logged_in = check_user_login(user_name, password)
     if logged_in:
         message = f'{user_name} Logged In Successfully'
     else:
@@ -100,7 +101,6 @@ def hello():
     return jsonify(request.json)
 
 
-
 @app.route('/save_employee', methods=['POST'])
 def submit_employee_data():
     """
@@ -108,12 +108,13 @@ def submit_employee_data():
     Returns:
 
     """
-    data=request.json
+    data = request.json
     print(data['age'])
-    if data['name']!= '' and data['age']!=0:
+    if data['name'] != '' and data['age'] != 0:
         return jsonify(f'{data["name"]} has been created successfully')
     else:
         return jsonify(f'Record has not been created successfully')
+
 
 @app.route('/create_record', methods=['POST'])
 def create_record():
@@ -135,6 +136,7 @@ def create_record():
         f.write(json.dumps(records, indent=2))
     return jsonify(record)
 
+
 @app.route('/get_records/<name>', methods=['GET'])
 def get_records(name):
     """
@@ -145,7 +147,7 @@ def get_records(name):
     Returns:
 
     """
-    #name = request.args.get('name')
+    # name = request.args.get('name')
     name = name
     print(f'{name}')
     with open('src/data.txt', 'r') as f:
@@ -156,7 +158,6 @@ def get_records(name):
                 print(record)
                 return jsonify(record)
         return jsonify({'error': 'data not found'})
-
 
 
 @app.route('/get_all_records', methods=['GET'])
@@ -170,7 +171,8 @@ def get_all_records():
         data = f.read()
         records = json.loads(data)
         return jsonify(records)
-        #return jsonify({'error': 'data not found'})
+        # return jsonify({'error': 'data not found'})
+
 
 @app.route('/update_record', methods=['PUT'])
 def update_record():
@@ -212,6 +214,51 @@ def delete_record():
     with open('src/data.txt', 'w') as f:
         f.write(json.dumps(new_records, indent=2))
     return jsonify(record)
+
+
+@app.route('/create_employee', methods=['POST'])
+def create_employee():
+    """
+
+    Returns:
+
+
+    """
+    data = request.json
+    print(data)
+    print(data['name'])
+    insert_employee(data)
+    return jsonify(data)
+
+
+@app.route('/get_all_employees', methods=['GET'])
+def get_all_employees():
+    """
+
+    Returns:
+
+
+    """
+    data = fetch_all_employees()
+    if data is not None:
+        return jsonify(data)
+    else:
+        return jsonify({'message':'No records found'})
+
+
+@app.route('/get__employee_detail_by_id/<employee_id>', methods=['GET'])
+def get_employee_detail_by_id(employee_id):
+    """
+
+    Returns:
+
+
+    """
+    data = fetch_employee_detail_by_employee_id(employee_id)
+    if data is not None:
+        return jsonify(data)
+    else:
+        return jsonify({'message': 'No records found'})
 
 
 if __name__ == '__main__':
