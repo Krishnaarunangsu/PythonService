@@ -132,6 +132,47 @@ def fetch_employee_detail_by_employee_id(employee_id):
         print("MySQL connection is closed")
 
 
+def update_employee_email(data):
+    """
+
+    Args:
+        data:
+        email:
+
+    Returns:
+
+    """
+    sql_update_query = """UPDATE employee SET email=%s where employee_id=%s"""
+    try:
+        print(data['email'])
+        print(1)
+        connection = pymysql.connect(host='localhost',
+                                     database='narayan',
+                                     user='root',
+                                     password="Narayan@15")
+        print(2)
+        cursor = connection.cursor()
+        # print(cursor)
+        # # cursor.execute("select @@version")
+        # # output = cursor.fetchall()
+        # # print(output)
+        tuple1 = (data['employee_id'], data['email'])
+        # tuple2 = ("Harry", "harry.ellison@abzooba.com", 25)
+        #
+        cursor.execute(sql_update_query, tuple1)
+        # cursor.execute(sql_insert_query, tuple2)
+        connection.commit()
+        print("Data inserted successfully into employee table using the prepared statement")
+
+    except pymysql.Error as error:
+        print("parameterized query failed {}".format(error))
+    finally:
+        # if connection.is_connected():
+        # cursor.close()
+        connection.close()
+        print("MySQL connection is closed")
+
+
 # Driver Code
 if __name__ == "__main__":
     fetch_employee_detail_by_employee_id(1)
