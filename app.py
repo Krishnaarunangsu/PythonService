@@ -2,7 +2,8 @@
 from flask import Flask, request, json, jsonify
 from src.middleware.data_processing_1 import get_module_subject
 from src.middleware.user_data import check_user_login
-from src.python_crud.python_crud import insert_employee, fetch_all_employees,fetch_employee_detail_by_employee_id
+from src.python_crud.python_crud import insert_employee, fetch_all_employees, fetch_employee_detail_by_employee_id, \
+    update_employee_email,delete_employee
 
 app = Flask(__name__)  # Flask Constructor
 
@@ -243,10 +244,10 @@ def get_all_employees():
     if data is not None:
         return jsonify(data)
     else:
-        return jsonify({'message':'No records found'})
+        return jsonify({'message': 'No records found'})
 
 
-@app.route('/get__employee_detail_by_id/<employee_id>', methods=['GET'])
+@app.route('/get_employee_detail_by_id/<employee_id>', methods=['GET'])
 def get_employee_detail_by_id(employee_id):
     """
 
@@ -259,6 +260,30 @@ def get_employee_detail_by_id(employee_id):
         return jsonify(data)
     else:
         return jsonify({'message': 'No records found'})
+
+
+@app.route('/update_employee_detail_by_id', methods=['PUT'])
+def update_employee_detail_by_id():
+    """
+
+    Returns:
+
+    """
+    data = request.json
+    update_employee_email(data)
+    return jsonify(data)
+
+
+@app.route('/delete_employee_detail_by_id', methods=['DELETE'])
+def delete_employee_detail_by_id():
+    """
+
+    Returns:
+
+    """
+    data = request.json
+    delete_employee(data)
+    return jsonify({'message':'Employee deleted successfully'})
 
 
 if __name__ == '__main__':

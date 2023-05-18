@@ -137,7 +137,6 @@ def update_employee_email(data):
 
     Args:
         data:
-        email:
 
     Returns:
 
@@ -156,13 +155,14 @@ def update_employee_email(data):
         # # cursor.execute("select @@version")
         # # output = cursor.fetchall()
         # # print(output)
-        tuple1 = (data['employee_id'], data['email'])
+        tuple1 = ( data['email'], data['employee_id'])
+        # tuple1 = ('abc.xyz@abz.com', 4)
         # tuple2 = ("Harry", "harry.ellison@abzooba.com", 25)
         #
         cursor.execute(sql_update_query, tuple1)
         # cursor.execute(sql_insert_query, tuple2)
         connection.commit()
-        print("Data inserted successfully into employee table using the prepared statement")
+        print("Data updated successfully into employee table using the prepared statement")
 
     except pymysql.Error as error:
         print("parameterized query failed {}".format(error))
@@ -173,6 +173,47 @@ def update_employee_email(data):
         print("MySQL connection is closed")
 
 
+def delete_employee(data):
+    """
+
+    Args:
+        data:
+
+    Returns:
+
+    """
+    sql_delete_query = """DELETE FROM employee WHERE employee_id=%s"""
+    try:
+        print(data['employee_id'])
+        print(1)
+        connection = pymysql.connect(host='localhost',
+                                     database='narayan',
+                                     user='root',
+                                     password="Narayan@15")
+        print(2)
+        cursor = connection.cursor()
+        # print(cursor)
+        # # cursor.execute("select @@version")
+        # # output = cursor.fetchall()
+        # # print(output)
+        tuple1 = (data['employee_id'])
+        # tuple1 = (5)
+        # tuple2 = ("Harry", "harry.ellison@abzooba.com", 25)
+        #
+        cursor.execute(sql_delete_query, tuple1)
+        # cursor.execute(sql_insert_query, tuple2)
+        connection.commit()
+        print("Data deleted successfully into employee table using the prepared statement")
+
+    except pymysql.Error as error:
+        print("parameterized query failed {}".format(error))
+    finally:
+        connection.close()
+        # cursor.close()
+        print("MySQL connection is closed")
+
+
 # Driver Code
 if __name__ == "__main__":
-    fetch_employee_detail_by_employee_id(1)
+    # fetch_employee_detail_by_employee_id(1)
+    delete_employee()
