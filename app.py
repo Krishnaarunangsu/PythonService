@@ -1,5 +1,5 @@
 # Python Flask Microframework
-from flask import Flask, request, json, jsonify
+from flask import Flask, request,make_response,json, jsonify
 from src.middleware.data_processing_1 import get_module_subject
 from src.middleware.user_data import check_user_login
 from src.python_crud.python_crud import insert_employee, fetch_all_employees, fetch_employee_detail_by_employee_id, \
@@ -225,11 +225,27 @@ def create_employee():
 
 
     """
-    data = request.json
-    print(data)
-    print(data['name'])
-    insert_employee(data)
-    return jsonify(data)
+    my_response=make_response('Response')
+    try:
+        data = request.json
+        print('Hu H1')
+        if data['name']=='' or data['email']=='' or data['age']=='':
+            print('Hu H1')
+            raise ValueError('Value is blank')
+        #id, message=insert_employee(data)
+        id=1
+        message='OK'
+        my_response.status_code = 200
+    except ValueError as ve:
+        print('Hu Ha')
+        id=0
+        # message=ve.args
+        message='Value is blank'
+        my_response.status_code=400
+    finally:
+        return jsonify({'id': id,'message':message,'code':my_response.status_code})
+
+
 
 
 @app.route('/get_all_employees', methods=['GET'])

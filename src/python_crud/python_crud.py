@@ -32,13 +32,19 @@ def insert_employee(data):
         # cursor.execute(sql_insert_query, tuple2)
         connection.commit()
         print("Data inserted successfully into employee table using the prepared statement")
+        # response = jsonify(message='User added successfully.', id=cursor.lastrowid)
+        id = ''
+        message = f'User added successfully.'
 
     except pymysql.Error as error:
         print("parameterized query failed {}".format(error))
+        id = cursor.lastrowid
+        message = f'User cannot be added.'
     finally:
         # if connection.is_connected():
-        # cursor.close()
+        cursor.close()
         connection.close()
+        return id, message
         print("MySQL connection is closed")
 
 
@@ -155,7 +161,7 @@ def update_employee_email(data):
         # # cursor.execute("select @@version")
         # # output = cursor.fetchall()
         # # print(output)
-        tuple1 = ( data['email'], data['employee_id'])
+        tuple1 = (data['email'], data['employee_id'])
         # tuple1 = ('abc.xyz@abz.com', 4)
         # tuple2 = ("Harry", "harry.ellison@abzooba.com", 25)
         #
@@ -168,7 +174,7 @@ def update_employee_email(data):
         print("parameterized query failed {}".format(error))
     finally:
         # if connection.is_connected():
-        # cursor.close()
+        cursor.close()
         connection.close()
         print("MySQL connection is closed")
 
