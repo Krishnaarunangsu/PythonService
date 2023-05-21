@@ -7,13 +7,11 @@ from src.python_crud.python_crud import insert_employee, fetch_all_employees, fe
 
 app = Flask(__name__)  # Flask Constructor
 
-
 @app.route('/create_employee', methods=['POST'])
 def create_employee():
     """
 
     Returns:
-
 
     """
     my_response = make_response('Response')
@@ -37,7 +35,6 @@ def get_all_employees():
 
     Returns:
 
-
     """
     row_count, emp_records = fetch_all_employees()
     if row_count is not None:
@@ -48,17 +45,13 @@ def get_all_employees():
             return jsonify(emp_records)
         elif len(emp_records) = 0:
             return jsonify({'message': 'No records found'})
-    except:
-    pass
 
-finally:
 
 @app.route('/get_employee_detail_by_id/<employee_id>', methods=['GET'])
 def get_employee_detail_by_id(employee_id):
     """
 
     Returns:
-
 
     """
     data_count, data = fetch_employee_detail_by_employee_id(employee_id)
