@@ -229,21 +229,24 @@ def create_employee():
     try:
         data = request.json
         print('Hu H1')
-        if data['name']=='' or data['email']=='' or data['age']=='':
+        if data['name'] == '' or data['email'] == '' or data['age'] == '':
             print('Hu H1')
             raise ValueError('Value is blank')
-        #id, message=insert_employee(data)
-        id=1
-        message='OK'
-        my_response.status_code = 200
+        # id, message=insert_employee(data)
+        id = 1
+        message = 'OK'
+        error_code = 0
+        # my_response.status_code = 200
     except ValueError as ve:
         print('Hu Ha')
-        id=0
+        id = 0
         # message=ve.args
-        message='Value is blank'
-        my_response.status_code=400
+        message = 'Value is blank'
+        error_code = 100
+        # my_response.status_code=200
     finally:
-        return jsonify({'id': id,'message':message,'code':my_response.status_code})
+        return jsonify(
+            {'error_code': error_code, 'id': id, 'message': message, 'http_status_code': my_response.status_code})
 
 
 
