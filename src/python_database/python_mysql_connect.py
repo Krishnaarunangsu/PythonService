@@ -7,7 +7,7 @@ def my_sql_connect():
     Returns:
 
     """
-    # connection = None
+    connection = None
     try:
         connection = pymysql.connect(host='localhost',
                                      database='narayan',
