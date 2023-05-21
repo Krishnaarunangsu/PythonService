@@ -233,20 +233,20 @@ def create_employee():
             print('Hu H1')
             raise ValueError('Value is blank')
         # id, message=insert_employee(data)
-        id = 1
-        message = 'OK'
-        error_code = 0
+        # id = 1
+        # message = 'OK'
+        # error_code = 0
         # my_response.status_code = 200
     except ValueError as ve:
         print('Hu Ha')
-        id = 0
+        # id = 0
         # message=ve.args
         message = 'Value is blank'
         error_code = 100
         # my_response.status_code=200
     finally:
         return jsonify(
-            {'error_code': error_code, 'id': id, 'message': message, 'http_status_code': my_response.status_code})
+            {'error_code': error_code, 'message': message, 'http_status_code': my_response.status_code})
 
 
 
@@ -259,9 +259,10 @@ def get_all_employees():
 
 
     """
-    data = fetch_all_employees()
-    if data is not None:
-        return jsonify(data)
+    emp_records = fetch_all_employees()
+    print(emp_records)
+    if len(emp_records) > 0:
+        return jsonify(emp_records)
     else:
         return jsonify({'message': 'No records found'})
 
@@ -274,11 +275,18 @@ def get_employee_detail_by_id(employee_id):
 
 
     """
-    data = fetch_employee_detail_by_employee_id(employee_id)
-    if data is not None:
-        return jsonify(data)
+    data_count, data = fetch_employee_detail_by_employee_id(employee_id)
+    message = None
+    print(f'Data Count:{data_count}')
+    if data_count is None:
+        message = f'Some problem has happened'
+        return jsonify({'message': message})
     else:
-        return jsonify({'message': 'No records found'})
+        if data_count == 1:
+            return jsonify(data)
+        elif data_count == 0:
+            message = f'No Data Found for the Employee Id:{employee_id}'
+            return jsonify({'message': message})
 
 
 @app.route('/update_employee_detail_by_id', methods=['PUT'])
