@@ -22,6 +22,7 @@ def insert_employee(employee_data: dict):
     row_count = None
     latest_id = 0
     try:
+        print(employee_data)
         connection = pymysql.connect(host='localhost',
                                      database='narayan',
                                      user='root',
@@ -136,6 +137,7 @@ def update_employee_email(employee_data: dict) -> object:
         cursor = connection.cursor()
         tuple1 = (employee_data['email'], employee_data['employee_id'])
         row_count = cursor.execute(sql_update_query, tuple1)
+        print(f'Row Count in update:{row_count}')
         connection.commit()
     except pymysql.Error as error:
         print("parameterized query failed {}".format(error))
@@ -168,6 +170,7 @@ def delete_employee(employee_data: dict):
         cursor = connection.cursor()
         tuple1 = (employee_data['employee_id'])
         row_count = cursor.execute(sql_delete_query, tuple1)
+        print(f'Row Count in update:{row_count}')
         connection.commit()
     except pymysql.Error as error:
         print("parameterized query failed {}".format(error))

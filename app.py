@@ -16,8 +16,10 @@ def create_employee():
     """
     my_response = make_response('Response')
     message = None
+    error_code = 0
     try:
         data = request.json
+        print(data)
         if data['name'] == '' or data['email'] == '' or data['age'] == '':
             raise ValueError('Value is blank')
         id, row_Count, message = insert_employee(data)
@@ -37,13 +39,13 @@ def get_all_employees():
 
     """
     row_count, emp_records = fetch_all_employees()
-    if row_count is not None:
+    if row_count is None:
         message = f'Some problem has happened'
         return jsonify({'message': message})
     else:
         if len(emp_records) > 0:
             return jsonify(emp_records)
-        elif len(emp_records) = 0:
+        elif len(emp_records) == 0:
             return jsonify({'message': 'No records found'})
 
 
@@ -77,6 +79,7 @@ def update_employee_detail_by_id():
     """
     my_response = make_response('Response')
     response = None
+    error_code = 0
     try:
         data = request.json
         row_updated = update_employee_email(data)
@@ -104,8 +107,10 @@ def delete_employee_detail_by_id():
     """
     my_response = make_response('Response')
     response = None
+    error_code = 0
     try:
         data = request.json
+        print(f'Employee to be deleted:{data}')
         row_deleted = delete_employee(data)
         if row_deleted is not None:
             if row_deleted > 0:
